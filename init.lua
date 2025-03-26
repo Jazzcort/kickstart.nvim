@@ -1021,3 +1021,30 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-------------------
+-- CUSTOM MACROS --
+-------------------
+local esc = vim.api.nvim_replace_termcodes('<Esc>', true, true, true)
+
+-- Javascript --
+vim.api.nvim_create_augroup('JSLogMacro', { clear = true })
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = 'JSLogMacro',
+  pattern = { 'javascript', 'typescript' },
+  callback = function()
+    vim.fn.setreg('l', 'yoconsole.log()' .. esc .. 'i""' .. esc .. 'Pa:' .. esc .. 'la, ' .. esc .. 'p')
+  end,
+})
+
+-- Python --
+vim.api.nvim_create_augroup('PythonPrintMacro', { clear = true })
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = 'PythonPrintMacro',
+  pattern = { 'python' },
+  callback = function()
+    vim.fn.setreg('l', 'yoprint()' .. esc .. 'i""' .. esc .. 'Pa:' .. esc .. 'la, ' .. esc .. 'p')
+  end,
+})
