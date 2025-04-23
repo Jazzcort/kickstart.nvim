@@ -643,21 +643,7 @@ require('lazy').setup({
             [vim.diagnostic.severity.HINT] = '󰌶 ',
           },
         } or {},
-        virtual_lines = {
-          current_line = true,
-          format = function(diagnostic)
-            local diagnostic_message = {
-              [vim.diagnostic.severity.ERROR] = diagnostic.message,
-              [vim.diagnostic.severity.WARN] = diagnostic.message,
-              [vim.diagnostic.severity.INFO] = diagnostic.message,
-              [vim.diagnostic.severity.HINT] = diagnostic.message,
-            }
-            return diagnostic_message[diagnostic.severity]
-          end,
-        },
-        -- virtual_text = {
-        --   source = 'if_many',
-        --   spacing = 2,
+        -- virtual_lines = {
         --   current_line = true,
         --   format = function(diagnostic)
         --     local diagnostic_message = {
@@ -669,6 +655,20 @@ require('lazy').setup({
         --     return diagnostic_message[diagnostic.severity]
         --   end,
         -- },
+        virtual_text = {
+          source = 'if_many',
+          spacing = 2,
+          current_line = true,
+          format = function(diagnostic)
+            local diagnostic_message = {
+              [vim.diagnostic.severity.ERROR] = diagnostic.message,
+              [vim.diagnostic.severity.WARN] = diagnostic.message,
+              [vim.diagnostic.severity.INFO] = diagnostic.message,
+              [vim.diagnostic.severity.HINT] = diagnostic.message,
+            }
+            return diagnostic_message[diagnostic.severity]
+          end,
+        },
       }
 
       -- LSP servers and clients are able to communicate to each other what features they support.
