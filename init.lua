@@ -250,7 +250,13 @@ rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  {
+    'NMAC427/guess-indent.nvim',
+    event = 'BufReadPre',
+    config = function()
+      require('guess-indent').setup {}
+    end,
+  }, -- Detect tabstop and shiftwidth automatically
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -689,7 +695,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         gopls = {},
-        pyright = {},
+        -- pyright = {},
         rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -767,7 +773,7 @@ require('lazy').setup({
       },
     },
     opts = {
-      notify_on_error = false,
+      notify_on_error = true,
       format_on_save = function(bufnr)
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
@@ -786,11 +792,69 @@ require('lazy').setup({
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
+        python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettier' },
+        javascriptreact = { 'prettier' },
+        typescript = { 'prettier' },
+        typescriptreact = { 'prettier' },
       },
     },
+    -- config = function()
+    --   local util = require 'conform.util'
+    --   require('conform').setup {
+    --     notify_on_error = true,
+    --     format_on_save = function(bufnr)
+    --       -- Disable "format_on_save lsp_fallback" for languages that don't
+    --       -- have a well standardized coding style. You can add additional
+    --       -- languages here or re-enable it for the disabled ones.
+    --       local disable_filetypes = { c = true, cpp = true }
+    --       if disable_filetypes[vim.bo[bufnr].filetype] then
+    --         return nil
+    --       else
+    --         return {
+    --           timeout_ms = 500,
+    --           lsp_format = 'fallback',
+    --         }
+    --       end
+    --     end,
+    --     formatters_by_ft = {
+    --       lua = { 'stylua' },
+    --       -- Conform can also run multiple formatters sequentially
+    --       -- python = { "isort", "black" },
+    --       python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
+    --       --
+    --       -- You can use 'stop_after_first' to run the first available formatter from the list
+    --       javascript = { 'prettier' },
+    --       javascriptreact = { 'prettier' },
+    --       typescript = { 'prettier' },
+    --       typescriptreact = { 'prettier' },
+    --     },
+    --     formatters = {
+    --       -- prettier = {
+    --       --   command = './node_modules/.bin/prettier',
+    --       --   args = { '--stdin-filepath', '$FILENAME' },
+    --       --   cwd = util.root_file {
+    --       --     -- https://prettier.io/docs/en/configuration.html
+    --       --     '.prettierrc',
+    --       --     '.prettierrc.json',
+    --       --     '.prettierrc.yml',
+    --       --     '.prettierrc.yaml',
+    --       --     '.prettierrc.json5',
+    --       --     '.prettierrc.js',
+    --       --     '.prettierrc.cjs',
+    --       --     '.prettierrc.mjs',
+    --       --     '.prettierrc.toml',
+    --       --     'prettier.config.js',
+    --       --     'prettier.config.cjs',
+    --       --     'prettier.config.mjs',
+    --       --     'package.json',
+    --       --   },
+    --       -- },
+    --     },
+    --   }
+    -- end,
   },
 
   { -- Autocompletion
@@ -993,11 +1057,11 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
