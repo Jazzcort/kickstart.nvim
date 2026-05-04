@@ -795,14 +795,16 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
+        -- python = { 'isort', 'black' },
+        -- python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
+        python = { 'ruff_fix', 'ruff_format' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         javascript = { 'prettier' },
         javascriptreact = { 'prettier' },
         typescript = { 'prettier' },
         typescriptreact = { 'prettier' },
+        html = { 'prettier' },
       },
     },
     -- config = function()
@@ -1119,9 +1121,9 @@ local esc = vim.api.nvim_replace_termcodes('<Esc>', true, true, true)
 -- Javascript --
 vim.api.nvim_create_augroup('JSLogMacro', { clear = true })
 
-vim.api.nvim_create_autocmd('FileType', {
+vim.api.nvim_create_autocmd('BufEnter', {
   group = 'JSLogMacro',
-  pattern = { 'javascript', 'typescript' },
+  pattern = { '*.js', '*.ts', '*.jsx', '*.tsx' },
   callback = function()
     vim.fn.setreg('l', 'yoconsole.log()' .. esc .. 'i""' .. esc .. 'Pa:' .. esc .. 'la, ' .. esc .. 'p')
   end,
@@ -1130,9 +1132,9 @@ vim.api.nvim_create_autocmd('FileType', {
 -- Python --
 vim.api.nvim_create_augroup('PythonPrintMacro', { clear = true })
 
-vim.api.nvim_create_autocmd('FileType', {
+vim.api.nvim_create_autocmd('BufEnter', {
   group = 'PythonPrintMacro',
-  pattern = { 'python' },
+  pattern = { '*.py' },
   callback = function()
     vim.fn.setreg('l', 'yoprint()' .. esc .. 'i""' .. esc .. 'Pa:' .. esc .. 'la, ' .. esc .. 'p')
   end,
