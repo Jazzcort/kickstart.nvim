@@ -602,8 +602,9 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         gopls = {},
-        -- pyright = {},
+        pyright = {},
         rust_analyzer = {},
+        svelte = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -690,8 +691,15 @@ require('lazy').setup({
       format_on_save = function(bufnr)
         -- You can specify filetypes to autoformat on save here:
         local enabled_filetypes = {
-          -- lua = true,
-          -- python = true,
+          lua = true,
+          python = true,
+          rust = true,
+          javascript = true,
+          javascriptreact = true,
+          typescript = true,
+          typescriptreact = true,
+          html = true,
+          css = true,
         }
         if enabled_filetypes[vim.bo[bufnr].filetype] then
           return { timeout_ms = 500 }
@@ -704,7 +712,8 @@ require('lazy').setup({
       },
       -- You can also specify external formatters in here.
       formatters_by_ft = {
-        -- rust = { 'rustfmt' },
+        lua = { 'stylua' },
+        rust = { 'rustfmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { 'isort', 'black' },
         -- python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
@@ -955,7 +964,7 @@ require('lazy').setup({
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
     config = function()
       -- ensure basic parser are installed
-      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+      local parsers = { 'bash', 'c', 'css', 'diff', 'html', 'javascript', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
       require('nvim-treesitter').install(parsers)
 
       ---@param buf integer
@@ -1058,9 +1067,7 @@ require('lazy').setup({
 -- Press q to quit QuickList
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'qf' },
-  callback = function()
-    vim.keymap.set('n', 'q', '<cmd>bd<cr>', { silent = true, buffer = true })
-  end,
+  callback = function() vim.keymap.set('n', 'q', '<cmd>bd<cr>', { silent = true, buffer = true }) end,
 })
 
 -------------------
@@ -1074,9 +1081,7 @@ vim.api.nvim_create_augroup('JSLogMacro', { clear = true })
 vim.api.nvim_create_autocmd('BufEnter', {
   group = 'JSLogMacro',
   pattern = { '*.js', '*.ts', '*.jsx', '*.tsx' },
-  callback = function()
-    vim.fn.setreg('l', 'yoconsole.log()' .. esc .. 'i""' .. esc .. 'Pa:' .. esc .. 'la, ' .. esc .. 'p')
-  end,
+  callback = function() vim.fn.setreg('l', 'yoconsole.log()' .. esc .. 'i""' .. esc .. 'Pa:' .. esc .. 'la, ' .. esc .. 'p') end,
 })
 
 -- Python --
@@ -1085,7 +1090,5 @@ vim.api.nvim_create_augroup('PythonPrintMacro', { clear = true })
 vim.api.nvim_create_autocmd('BufEnter', {
   group = 'PythonPrintMacro',
   pattern = { '*.py' },
-  callback = function()
-    vim.fn.setreg('l', 'yoprint()' .. esc .. 'i""' .. esc .. 'Pa:' .. esc .. 'la, ' .. esc .. 'p')
-  end,
+  callback = function() vim.fn.setreg('l', 'yoprint()' .. esc .. 'i""' .. esc .. 'Pa:' .. esc .. 'la, ' .. esc .. 'p') end,
 })
